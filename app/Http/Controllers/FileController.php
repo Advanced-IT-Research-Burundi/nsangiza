@@ -2,63 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileStoreRequest;
+use App\Http\Requests\FileUpdateRequest;
+use App\Models\File;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        return view("myFiles.index");
+        $files = File::all();
+
+        return view('file.index', [
+            'files' => $files,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(Request $request): View
     {
-        //
+        return view('file.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(FileStoreRequest $request): RedirectResponse
     {
-        //
+        $file = File::create($request->validated());
+
+        $request->session()->flash('file.id', $file->id);
+
+        return redirect()->route('files.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Request $request, File $file): View
     {
-        //
+        return view('file.show', [
+            'file' => $file,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Request $request, File $file): View
     {
-        //
+        return view('file.edit', [
+            'file' => $file,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(FileUpdateRequest $request, File $file): RedirectResponse
     {
-        //
+        $file->update($request->validated());
+
+        $request->session()->flash('file.id', $file->id);
+
+        return redirect()->route('files.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Request $request, File $file): RedirectResponse
     {
-        //
+        $file->delete();
+
+        return redirect()->route('files.index');
     }
 }

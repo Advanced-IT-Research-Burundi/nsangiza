@@ -1,5 +1,26 @@
 models:
-  # ...
+  File:
+    user_id: id foreign
+    name: string
+    path: string
+    type: string
+    size: integer
+
+  SharedFile:
+    file_id: id foreign
+    shared_by: id foreign:users
+    access_level: string
+
+  FileActivity:
+    file_id: id foreign
+    user_id: id foreign
+    action: string
+    details: string
 
 controllers:
-  # ...
+  File:
+    resource: web
+  SharedFile:
+    resource: web
+  FileActivity:
+    resource: web

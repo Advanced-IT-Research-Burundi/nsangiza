@@ -1,2 +1,41 @@
+created:
+    - app/Http/Controllers/FileController.php
+    - app/Http/Controllers/SharedFileController.php
+    - app/Http/Controllers/FileActivityController.php
+    - database/factories/FileFactory.php
+    - database/factories/SharedFileFactory.php
+    - database/factories/FileActivityFactory.php
+    - database/migrations/2025_04_29_171444_create_files_table.php
+    - database/migrations/2025_04_29_171445_create_shared_files_table.php
+    - database/migrations/2025_04_29_171446_create_file_activities_table.php
+    - app/Models/File.php
+    - app/Models/SharedFile.php
+    - app/Models/FileActivity.php
+    - tests/Feature/Http/Controllers/FileControllerTest.php
+    - tests/Feature/Http/Controllers/SharedFileControllerTest.php
+    - tests/Feature/Http/Controllers/FileActivityControllerTest.php
+    - app/Http/Requests/FileStoreRequest.php
+    - app/Http/Requests/FileUpdateRequest.php
+    - app/Http/Requests/SharedFileStoreRequest.php
+    - app/Http/Requests/SharedFileUpdateRequest.php
+    - app/Http/Requests/FileActivityStoreRequest.php
+    - app/Http/Requests/FileActivityUpdateRequest.php
+    - resources/views/file/index.blade.php
+    - resources/views/file/create.blade.php
+    - resources/views/file/show.blade.php
+    - resources/views/file/edit.blade.php
+    - resources/views/sharedFile/index.blade.php
+    - resources/views/sharedFile/create.blade.php
+    - resources/views/sharedFile/show.blade.php
+    - resources/views/sharedFile/edit.blade.php
+    - resources/views/fileActivity/index.blade.php
+    - resources/views/fileActivity/create.blade.php
+    - resources/views/fileActivity/show.blade.php
+    - resources/views/fileActivity/edit.blade.php
+updated:
+    - routes/web.php
 models:
     User: { name: string, email: string, email_verified_at: 'timestamp nullable default:NULL', password: string, remember_token: 'string:100 nullable default:NULL' }
+    File: { user_id: 'id foreign', name: string, path: string, type: string, size: integer }
+    SharedFile: { file_id: 'id foreign', shared_by: 'id foreign:users', access_level: string }
+    FileActivity: { file_id: 'id foreign', user_id: 'id foreign', action: string, details: string }
