@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 Route::get('/upload', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('upload');
+})->name('upload');
 
 Route::middleware('auth')->group(function () {
     Route::resource("file",FileController::class);
