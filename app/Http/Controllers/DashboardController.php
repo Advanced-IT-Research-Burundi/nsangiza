@@ -280,4 +280,24 @@ class DashboardController extends Controller
         $activity->details = $details;
         $activity->save();
     }
+    public function fileDetails($id)
+    {
+        $file = File::where('id', $id)
+                    ->where(function ($query) {
+                        $query->where('user_id', Auth::id())
+                            ->orWhereHas('sharedFiles', function ($q) {
+                                $q->where('user_id', Auth::id());
+                            });
+                    })
+                    ->firstOrFail();
+
+        return response()->json([
+            'id' => $file->id,
+            'name' => $file->name,
+            'type' => $file->type,
+            'size' => $file->size,
+            'created_at' => $file->created_at,
+            'owner' => $file->user->name ?? null,
+        ]);
+    }
 }
