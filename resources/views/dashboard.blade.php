@@ -13,33 +13,81 @@
         </div>
 
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show success-alert" role="alert">
+            <div class="success-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+                <div class="success-message">
+                    <h5>Téléchargement réussi !</h5>
+                    <p>{{ session('success') }}</p>
+
+                    <!-- QR Code et lien de partage -->
+                    @if(session('fileId') && session('fileName'))
+                    <div class="share-success-container mt-3">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="qr-success-container">
+                                    <div id="successQrcode"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="share-link-container">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control success-share-link" value="{{ url('/share/'.session('fileId')) }}" readonly>
+                                        <button class="btn btn-outline-success copy-success-btn" type="button">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Partagez ce lien ou scannez le QR code</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
 
         @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3"></i>
+                <div>
+                    <strong>Erreur !</strong> {{ session('error') }}
+                </div>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
 
         @if(!isset($activeTab) || $activeTab == 'upload')
-        <!-- Upload Area -->
+        <!-- Zone d'upload améliorée avec barre de progression -->
         <form action="{{ route('dashboard.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
             @csrf
-            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click();">
+            <div class="upload-area" id="uploadArea">
                 <div class="upload-icon">
                     <i class="fas fa-cloud-upload-alt"></i>
                 </div>
-                <h3 class="upload-text">Drag & Drop files here or click to browse</h3>
-                <div class="mt-3">
-                    <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click();">
-                        <i class="fas fa-upload me-2"></i> Choose Files
+                <h3 class="upload-text">Déposez vos fichiers ici ou cliquez pour parcourir</h3>
+
+                <!-- Barre de progression cachée par défaut -->
+                <div class="progress upload-progress mt-3" style="display: none;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
+
+                <div class="upload-status mt-2" style="display: none;">
+                    <span class="current-file"></span>
+                    <span class="upload-percentage">0%</span>
+                </div>
+
+                <div class="mt-4 upload-buttons">
+                    <button type="button" class="btn btn-primary btn-lg px-4" onclick="document.getElementById('fileInput').click();">
+                        <i class="fas fa-upload me-2"></i> Choisir des fichiers
                     </button>
-                    <input type="file" id="fileInput" name="files[]" class="d-none" multiple onchange="document.getElementById('uploadForm').submit();">
+                    <input type="file" id="fileInput" name="files[]" class="d-none" multiple>
                 </div>
             </div>
         </form>
@@ -415,12 +463,22 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Upload area drag and drop functionality
+        // Configuration pour le glisser-déposer
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
+        const uploadForm = document.getElementById('uploadForm');
+        const progressBar = document.querySelector('.progress');
+        const progressBarInner = document.querySelector('.progress-bar');
+        const uploadStatus = document.querySelector('.upload-status');
+        const currentFileSpan = document.querySelector('.current-file');
+        const uploadPercentage = document.querySelector('.upload-percentage');
 
+        // Fonction pour gérer le glisser-déposer
         if (uploadArea) {
+            // Empêcher le comportement par défaut
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 uploadArea.addEventListener(eventName, preventDefaults, false);
             });
@@ -430,6 +488,7 @@
                 e.stopPropagation();
             }
 
+            // Ajouter/supprimer la classe pour le style
             ['dragenter', 'dragover'].forEach(eventName => {
                 uploadArea.addEventListener(eventName, highlight, false);
             });
@@ -439,96 +498,128 @@
             });
 
             function highlight() {
-                uploadArea.classList.add('active');
+                uploadArea.classList.add('dragging');
             }
 
             function unhighlight() {
-                uploadArea.classList.remove('active');
+                uploadArea.classList.remove('dragging');
             }
 
+            // Gérer le drop
             uploadArea.addEventListener('drop', handleDrop, false);
 
             function handleDrop(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
                 fileInput.files = files;
-                document.getElementById('uploadForm').submit();
+                handleFiles(files);
+            }
+
+            // Gérer le clic sur la zone
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // Gérer la sélection de fichiers
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    showProgressBar();
+                    simulateUpload(files);
+                }
+            }
+
+            // Simuler l'upload avec la barre de progression
+            function showProgressBar() {
+                progressBar.style.display = 'flex';
+                uploadStatus.style.display = 'block';
+                document.querySelector('.upload-buttons').style.display = 'none';
+            }
+
+            function simulateUpload(files) {
+                let progress = 0;
+                const totalFiles = files.length;
+                let currentFileIndex = 0;
+
+                // Afficher le nom du premier fichier
+                if (files[0]) {
+                    currentFileSpan.textContent = `Téléchargement de ${files[0].name} (${formatFileSize(files[0].size)})`;
+                }
+
+                const interval = setInterval(() => {
+                    progress += 1;
+
+                    // Calculer le progrès par fichier
+                    if (progress >= 100 && currentFileIndex < totalFiles - 1) {
+                        currentFileIndex++;
+                        progress = 0;
+                        currentFileSpan.textContent = `Téléchargement de ${files[currentFileIndex].name} (${formatFileSize(files[currentFileIndex].size)})`;
+                    }
+
+                    progressBarInner.style.width = progress + '%';
+                    progressBarInner.setAttribute('aria-valuenow', progress);
+                    uploadPercentage.textContent = progress + '%';
+
+                    if (progress >= 100 && currentFileIndex >= totalFiles - 1) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            currentFileSpan.textContent = 'Finalisation...';
+                            setTimeout(() => {
+                                // Soumettre le formulaire après la simulation
+                                uploadForm.submit();
+                            }, 500);
+                        }, 400);
+                    }
+                }, 50);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
         }
 
-        // Share file modal
-        const shareFileModal = document.getElementById('shareFileModal');
-        if (shareFileModal) {
-            shareFileModal.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const fileId = button.getAttribute('data-file-id');
-                const fileName = button.getAttribute('data-file-name');
+        // Générer le QR code dans le message de succès
+        const successQrcode = document.getElementById('successQrcode');
+        if (successQrcode) {
+            const shareLink = document.querySelector('.success-share-link').value;
 
-                document.getElementById('shareFileId').value = fileId;
-                document.getElementById('shareFileName').textContent = fileName;
+            new QRCode(successQrcode, {
+                text: shareLink,
+                width: 120,
+                height: 120,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
             });
+
+            // Fonctionnalité de copie pour le lien de succès
+            const copySuccessBtn = document.querySelector('.copy-success-btn');
+            const successShareLink = document.querySelector('.success-share-link');
+
+            if (copySuccessBtn && successShareLink) {
+                copySuccessBtn.addEventListener('click', function() {
+                    successShareLink.select();
+                    document.execCommand('copy');
+
+                    copySuccessBtn.classList.add('copied');
+                    copySuccessBtn.innerHTML = '<i class="fas fa-check"></i>';
+
+                    setTimeout(() => {
+                        copySuccessBtn.classList.remove('copied');
+                        copySuccessBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                    }, 2000);
+                });
+            }
         }
-
-        // File details modal
-        const fileDetailsModal = document.getElementById('fileDetailsModal');
-        if (fileDetailsModal) {
-            fileDetailsModal.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const fileId = button.getAttribute('data-file-id');
-
-                // Fetch file details via AJAX
-                fetch(`/dashboard/file/${fileId}/details`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('fileDetailIcon').innerHTML = `<i class="${data.file_icon} fa-4x"></i>`;
-                        document.getElementById('fileDetailName').textContent = data.name;
-                        document.getElementById('fileDetailType').textContent = data.type.toUpperCase();
-                        document.getElementById('fileDetailSize').textContent = data.formatted_size;
-                        document.getElementById('fileDetailDate').textContent = data.created_at;
-                        document.getElementById('fileDetailOwner').textContent = data.owner;
-                        document.getElementById('fileDetailDownload').href = `/dashboard/file/${data.id}/download`;
-
-                        // Handle shared users list
-                        const sharedWithList = document.getElementById('sharedWithList');
-                        sharedWithList.innerHTML = '';
-
-                        if (data.shared_users && data.shared_users.length > 0) {
-                            document.getElementById('sharedWithSection').style.display = 'block';
-                            data.shared_users.forEach(user => {
-                                const li = document.createElement('li');
-                                li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                                li.innerHTML = `
-                                    <div>
-                                        <strong>${user.name}</strong>
-                                        <small class="text-muted d-block">${user.email}</small>
-                                    </div>
-                                    <span class="badge bg-primary">${user.access_level}</span>
-                                `;
-                                sharedWithList.appendChild(li);
-                            });
-                        } else {
-                            document.getElementById('sharedWithSection').style.display = 'none';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching file details:', error);
-                    });
-            });
-        }
-
-        // Delete file modal
-        const deleteFileModal = document.getElementById('deleteFileModal');
-        if (deleteFileModal) {
-            deleteFileModal.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const fileId = button.getAttribute('data-file-id');
-                const fileName = button.getAttribute('data-file-name');
-
-                document.getElementById('deleteFileId').value = fileId;
-                document.getElementById('deleteFileName').textContent = fileName;
-            });
-        }
-
         // View toggle functionality
         const gridViewBtn = document.getElementById('gridView');
         const listViewBtn = document.getElementById('listView');
@@ -574,7 +665,7 @@
                 fileNameDisplay.textContent = fileName;
 
                 // Créer le lien de partage
-                const shareLink = `${window.location.origin}/share/${fileId}`;
+                const shareLink = `${window.location.origin}/download/${fileId}`;
                 const shareLinkInput = shareModal.querySelector('.share-link');
                 shareLinkInput.value = shareLink;
 
@@ -729,32 +820,110 @@
 }
 
 .upload-area {
-    border: 2px dashed #d1d3e2;
-    border-radius: 0.5rem;
-    padding: 2.5rem;
-    text-align: center;
-    background-color: var(--secondary-color);
-    transition: all 0.3s;
-    cursor: pointer;
-    margin-bottom: 2rem;
-}
+        border: 2px dashed #3498db;
+        border-radius: 10px;
+        padding: 40px 20px;
+        text-align: center;
+        background-color: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-.upload-area:hover, .upload-area.active {
-    border-color: var(--primary-color);
-    background-color: rgba(78, 115, 223, 0.05);
-}
+    .upload-area:hover {
+        background-color: #e9ecef;
+        border-color: #2980b9;
+    }
 
-.upload-icon {
-    font-size: 3rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
+    .upload-area.dragging {
+        background-color: #e3f2fd;
+        border-color: #1565c0;
+    }
 
-.upload-text {
-    font-size: 1.25rem;
-    color: #6e707e;
-    margin-bottom: 1rem;
-}
+    .upload-icon {
+        font-size: 60px;
+        color: #3498db;
+        margin-bottom: 15px;
+    }
+
+    .upload-text {
+        color: #555;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .upload-progress {
+        height: 12px;
+        border-radius: 6px;
+        margin: 0 auto;
+        max-width: 80%;
+    }
+
+    .upload-status {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .success-alert {
+        border-left: 4px solid #28a745;
+    }
+
+    .success-content {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .success-icon {
+        color: #28a745;
+        margin-right: 15px;
+    }
+
+    .success-message h5 {
+        color: #155724;
+        margin-bottom: 5px;
+    }
+
+    .share-success-container {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .qr-success-container {
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+    }
+
+    #successQrcode {
+        width: 120px;
+        height: 120px;
+    }
+
+    .share-link-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .copy-success-btn {
+        transition: all 0.2s;
+    }
+
+    .copy-success-btn.copied {
+        background-color: #28a745;
+        color: white;
+    }
+
+    @media (max-width: 767px) {
+        .qr-success-container {
+            margin-bottom: 15px;
+        }
+    }
 
 .btn-primary {
     background-color: var(--primary-color);
