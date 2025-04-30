@@ -198,10 +198,9 @@ class DashboardController extends Controller
      * @param  int  $limit
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function getRecentFiles($limit = 6)
+    private function getRecentFiles($limit = 10)
     {
-        return File::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+        return File::orderBy('created_at', 'desc')
             ->take($limit)
             ->get();
     }
@@ -213,9 +212,7 @@ class DashboardController extends Controller
      */
     private function getSharedFiles()
     {
-        return File::whereHas('sharedFiles', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        return File::where('user_id', Auth::id())->get();
     }
 
     /**
@@ -225,8 +222,7 @@ class DashboardController extends Controller
      */
     private function getAllFiles()
     {
-        return File::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+        return File::orderBy('created_at', 'desc')
             ->get();
     }
 

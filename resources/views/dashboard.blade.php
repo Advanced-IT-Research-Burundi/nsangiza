@@ -65,27 +65,46 @@
         <div class="files-grid">
             @if(isset($activeTab) && $activeTab == 'shared')
                 @forelse($sharedFiles as $file)
-                    <div class="file-card">
-                        <div class="file-actions">
-                            <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
-                            @if($file->pivot->access_level == 'edit' || $file->pivot->access_level == 'full')
-                            <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
-                            @endif
-                            <div class="action-btn" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></div>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('dashboard.download', $file->id) }}">Download</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#fileDetailsModal" data-file-id="{{ $file->id }}">Details</a></li>
-                            </ul>
-                        </div>
-                        <div class="file-icon {{ $file->icon_class }}">
-                            <i class="{{ $file->file_icon }}"></i>
-                        </div>
-                        <div class="file-name">{{ $file->name }}</div>
-                        <div class="file-info">
-                            <span>{{ $file->formatted_size }}</span>
-                            <span>{{ $file->created_at->format('M d') }}</span>
+                <div class="file-card">
+                    <div class="file-actions">
+                        <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
+                        <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
+
+                        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                    <div class="file-icon {{ $file->icon_class }}">
+                        <i class="{{ $file->file_icon }}"></i>
+                    </div>
+                    <div class="file-name">{{ $file->name }}</div>
+                    <div class="file-info">
+                        <span>{{ $file->formatted_size }}</span>
+                        <span>{{ $file->created_at->format('M d') }}</span>
+                    </div>
+                </div>
+                 <!-- Delete File Modal -->
+                 <div class="modal fade" id="deleteFileModal-{{ $file->id }}" tabindex="-1" aria-labelledby="deleteFileModalLabel-{{ $file->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteFileModalLabel-{{ $file->id }}">Supprimer le fichier</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir supprimer <strong>{{ $file->name }}</strong> ? Cette action est irréversible.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <form action="{{ route('files.destroy', $file->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                </div>
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info">No shared files found.</div>
@@ -93,28 +112,99 @@
                 @endforelse
             @elseif(isset($activeTab) && $activeTab == 'all')
                 @forelse($allFiles as $file)
-                    <div class="file-card">
-                        <div class="file-actions">
-                            <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
-                            <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
-                            <div class="action-btn" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></div>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('dashboard.download', $file->id) }}">Download</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Share</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#fileDetailsModal" data-file-id="{{ $file->id }}">Details</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Delete</a></li>
-                            </ul>
-                        </div>
-                        <div class="file-icon {{ $file->icon_class }}">
-                            <i class="{{ $file->file_icon }}"></i>
-                        </div>
-                        <div class="file-name">{{ $file->name }}</div>
-                        <div class="file-info">
-                            <span>{{ $file->formatted_size }}</span>
-                            <span>{{ $file->created_at->format('M d') }}</span>
+                <div class="file-card">
+                    <div class="file-actions">
+                        <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
+                        <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
+
+                        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                    <div class="file-icon {{ $file->icon_class }}">
+                        <i class="{{ $file->file_icon }}"></i>
+                    </div>
+                    <div class="file-name">{{ $file->name }}</div>
+                    <div class="file-info">
+                        <span>{{ $file->formatted_size }}</span>
+                        <span>{{ $file->created_at->format('M d') }}</span>
+                    </div>
+                </div>
+                 <!-- Delete File Modal -->
+                 <div class="modal fade" id="deleteFileModal-{{ $file->id }}" tabindex="-1" aria-labelledby="deleteFileModalLabel-{{ $file->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteFileModalLabel-{{ $file->id }}">Supprimer le fichier</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir supprimer <strong>{{ $file->name }}</strong> ? Cette action est irréversible.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <form action="{{ route('files.destroy', $file->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- modal de partage avec QR code -->
+                <div class="modal fade" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="shareFileModalLabel">Partager le fichier</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                        <div class="qr-code-container mb-3 mb-md-0">
+                                            <div id="qrcode"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="share-details">
+                                            <h6 class="file-name-display mb-3"></h6>
+
+                                            <div class="copy-link-container">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control share-link" readonly>
+                                                    <button class="btn btn-primary copy-btn" type="button">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="share-options mt-4">
+                                                <p class="text-muted mb-2">Partager via</p>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="email">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="whatsapp">
+                                                        <i class="fab fa-whatsapp"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="telegram">
+                                                        <i class="fab fa-telegram"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info">No files found. Upload a file to get started.</div>
@@ -126,14 +216,10 @@
                         <div class="file-actions">
                             <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
                             <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
-                            <div class="action-btn" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></div>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('dashboard.download', $file->id) }}">Download</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Share</a></li>
-                                {{-- <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#fileDetailsModal" data-file-id="{{ $file->id }}">Details</a></li> --}}
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Delete</a></li>
-                            </ul>
+
+                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </div>
                         <div class="file-icon {{ $file->icon_class }}">
                             <i class="{{ $file->file_icon }}"></i>
@@ -142,6 +228,28 @@
                         <div class="file-info">
                             <span>{{ $file->formatted_size }}</span>
                             <span>{{ $file->created_at->format('M d') }}</span>
+                        </div>
+                    </div>
+                    <!-- Delete File Modal -->
+                    <div class="modal fade" id="deleteFileModal-{{ $file->id }}" tabindex="-1" aria-labelledby="deleteFileModalLabel-{{ $file->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteFileModalLabel-{{ $file->id }}">Supprimer le fichier</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Êtes-vous sûr de vouloir supprimer <strong>{{ $file->name }}</strong> ? Cette action est irréversible.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <form action="{{ route('files.destroy', $file->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -193,124 +301,13 @@
     </div>
 </div>
 
-<!-- Share File Modal -->
-<div class="modal fade" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="shareFileModalLabel">Share File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            {{-- <form action="{{ route('dashboard.share') }}" method="POST" id="shareFileForm"> --}}
-            <form action="" method="POST" id="shareFileForm">
-                @csrf
-                <input type="hidden" name="file_id" id="shareFileId">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="userEmail" class="form-label">User Email</label>
-                        <input type="email" class="form-control" id="userEmail" name="user_email" required>
-                        <div class="form-text">Enter the email of the user you want to share with.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="accessLevel" class="form-label">Access Level</label>
-                        <select class="form-select" id="accessLevel" name="access_level" required>
-                            <option value="view">View only</option>
-                            <option value="edit">Edit</option>
-                            <option value="full">Full access</option>
-                        </select>
-                    </div>
-                    <div class="file-name-display mb-3">
-                        <span class="text-muted">File: </span>
-                        <span id="shareFileName"></span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Share</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- File Details Modal -->
-<div class="modal fade" id="fileDetailsModal" tabindex="-1" aria-labelledby="fileDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="fileDetailsModalLabel">File Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-4" id="fileDetailIcon">
-                    <!-- Icon will be dynamically inserted here -->
-                </div>
 
-                <div class="file-details-content">
-                    <div class="row mb-2">
-                        <div class="col-4 text-muted">Name:</div>
-                        <div class="col-8" id="fileDetailName"></div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-4 text-muted">Type:</div>
-                        <div class="col-8" id="fileDetailType"></div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-4 text-muted">Size:</div>
-                        <div class="col-8" id="fileDetailSize"></div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-4 text-muted">Uploaded:</div>
-                        <div class="col-8" id="fileDetailDate"></div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-4 text-muted">Owner:</div>
-                        <div class="col-8" id="fileDetailOwner"></div>
-                    </div>
-                </div>
-
-                <div class="shared-with-section mt-4" id="sharedWithSection">
-                    <h6>Shared With</h6>
-                    <ul class="list-group" id="sharedWithList">
-                        <!-- List of shared users will be populated here -->
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="#" class="btn btn-primary" id="fileDetailDownload">Download</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete File Modal -->
-<div class="modal fade" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete <strong id="deleteFileName"></strong>? This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                {{-- <form action="{{ route('dashboard.delete') }}" method="POST" id="deleteFileForm"> --}}
-                <form action="" method="POST" id="deleteFileForm">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="file_id" id="deleteFileId">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Upload area drag and drop functionality
@@ -457,12 +454,145 @@
             }
         }
     });
-</script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const shareModal = document.getElementById('shareFileModal');
+
+        if (shareModal) {
+            shareModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const fileId = button.getAttribute('data-file-id');
+                const fileName = button.getAttribute('data-file-name');
+
+                // Afficher le nom du fichier
+                const fileNameDisplay = shareModal.querySelector('.file-name-display');
+                fileNameDisplay.textContent = fileName;
+
+                // Créer le lien de partage
+                const shareLink = `${window.location.origin}/share/${fileId}`;
+                const shareLinkInput = shareModal.querySelector('.share-link');
+                shareLinkInput.value = shareLink;
+
+                // Générer le QR code
+                const qrcodeContainer = document.getElementById('qrcode');
+                qrcodeContainer.innerHTML = '';
+
+                new QRCode(qrcodeContainer, {
+                    text: shareLink,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                // Fonctionnalité de copie
+                const copyBtn = shareModal.querySelector('.copy-btn');
+                copyBtn.addEventListener('click', function() {
+                    shareLinkInput.select();
+                    document.execCommand('copy');
+
+                    copyBtn.classList.add('copied');
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                    }, 2000);
+                });
+
+                // Fonctionnalités de partage sur les plateformes
+                const shareBtns = shareModal.querySelectorAll('.share-btn');
+                shareBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const platform = this.getAttribute('data-platform');
+                        let shareUrl;
+
+                        switch(platform) {
+                            case 'email':
+                                shareUrl = `mailto:?subject=Partage du fichier: ${fileName}&body=Voici le lien pour accéder au fichier ${fileName}: ${shareLink}`;
+                                break;
+                            case 'whatsapp':
+                                shareUrl = `https://wa.me/?text=${encodeURIComponent(`Voici le fichier ${fileName}: ${shareLink}`)}`;
+                                break;
+                            case 'telegram':
+                                shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(`Voici le fichier ${fileName}`)}`;
+                                break;
+                        }
+
+                        if (shareUrl) {
+                            window.open(shareUrl, '_blank');
+                        }
+                    });
+                });
+            });
+        }
+    });
+    </script>
 @endpush
 
 @push('styles')
 <style>
+    .qr-code-container {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #qrcode {
+        width: 180px;
+        height: 180px;
+    }
+
+    .share-details {
+        padding: 10px;
+    }
+
+    .file-name-display {
+        font-weight: 600;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .copy-link-container {
+        margin-top: 1rem;
+    }
+
+    .copy-btn {
+        transition: all 0.2s;
+    }
+
+    .copy-btn.copied {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .share-options {
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+    }
+
+    .share-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .share-btn:hover {
+        transform: scale(1.05);
+    }
 /* Existing styles from the original template */
+
+
 .content-container {
     padding: 1.5rem;
 }

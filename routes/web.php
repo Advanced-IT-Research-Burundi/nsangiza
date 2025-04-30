@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/upload', [App\Http\Controllers\DashboardController::class, 'upload'])->name('dashboard.upload');
     Route::get('/dashboard/download/{id}', [App\Http\Controllers\DashboardController::class, 'download'])->name('dashboard.download');
     Route::post('/dashboard/share/{id}', [App\Http\Controllers\DashboardController::class, 'shareFile'])->name('dashboard.share');
-    Route::get('/dashboard/file/{id}/details', [DashboardController::class, 'fileDetails'])
+    Route::get('/dashboard/file/{id}/details', [App\Http\Controllers\DashboardController::class, 'fileDetails'])
          ->name('dashboard.file.details');
     Route::resource('files', App\Http\Controllers\FileController::class);
     Route::resource('shared-files', App\Http\Controllers\SharedFileController::class);

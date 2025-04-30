@@ -491,7 +491,7 @@
                         <div class="user-avatar">
                             <i class="fas fa-user"></i>
                         </div>
-                        <span>John Doe</span>
+                        <span>{{ Auth::user()->name ??''}}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
@@ -514,7 +514,7 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
+    @stack('scripts')
     <script>
         // Toggle sidebar
         document.getElementById('menuToggle').addEventListener('click', function() {

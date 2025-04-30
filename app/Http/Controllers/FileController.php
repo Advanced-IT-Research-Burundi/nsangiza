@@ -61,6 +61,6 @@ class FileController extends Controller
     {
         $file->delete();
 
-        return redirect()->route('files.index');
+        return redirect()->route('dashboard');
     }
 }
