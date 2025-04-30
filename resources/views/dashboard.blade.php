@@ -105,6 +105,59 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- modal de partage avec QR code -->
+                <div class="modal fade" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="shareFileModalLabel">Partager le fichier</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                        <div class="qr-code-container mb-3 mb-md-0">
+                                            <div id="qrcode"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="share-details">
+                                            <h6 class="file-name-display mb-3"></h6>
+
+                                            <div class="copy-link-container">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control share-link" readonly>
+                                                    <button class="btn btn-primary copy-btn" type="button">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="share-options mt-4">
+                                                <p class="text-muted mb-2">Partager via</p>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="email">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="whatsapp">
+                                                        <i class="fab fa-whatsapp"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="telegram">
+                                                        <i class="fab fa-telegram"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info">No shared files found.</div>
@@ -252,6 +305,59 @@
                             </div>
                         </div>
                     </div>
+
+                <!-- modal de partage avec QR code -->
+                <div class="modal fade" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="shareFileModalLabel">Partager le fichier</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                                        <div class="qr-code-container mb-3 mb-md-0">
+                                            <div id="qrcode"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="share-details">
+                                            <h6 class="file-name-display mb-3"></h6>
+
+                                            <div class="copy-link-container">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control share-link" readonly>
+                                                    <button class="btn btn-primary copy-btn" type="button">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="share-options mt-4">
+                                                <p class="text-muted mb-2">Partager via</p>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="email">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="whatsapp">
+                                                        <i class="fab fa-whatsapp"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary share-btn" data-platform="telegram">
+                                                        <i class="fab fa-telegram"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info">No recent files found. Upload a file to get started.</div>
