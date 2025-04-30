@@ -130,7 +130,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('dashboard.download', $file->id) }}">Download</a></li>
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Share</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#fileDetailsModal" data-file-id="{{ $file->id }}">Details</a></li>
+                                {{-- <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#fileDetailsModal" data-file-id="{{ $file->id }}">Details</a></li> --}}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}">Delete</a></li>
                             </ul>
