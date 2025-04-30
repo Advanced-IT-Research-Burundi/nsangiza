@@ -5,9 +5,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('dashboard');
 });
-Route::get('/upload', function () {
+Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('upload');
 

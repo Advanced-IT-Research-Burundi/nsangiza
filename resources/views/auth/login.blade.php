@@ -455,7 +455,7 @@
                     </div>
 
                     <div class="register-text">
-                        Vous n'avez pas de compte ? <a href="#" class="register-link">Inscrivez-vous</a>
+                        Vous n'avez pas de compte ? <a href="{{ route('register') }}" class="register-link">Inscrivez-vous</a>
                     </div>
                 </div>
             </div>
@@ -507,7 +507,7 @@
                             </label>
                         </div>
                         <div>
-                            <a href="#" class="forgot-link text-decoration-none">Mot de passe oublié ?</a>
+                            <a href="{{ route('password.request') }}" class="forgot-link text-decoration-none">Mot de passe oublié ?</a>
                         </div>
                     </div>
 

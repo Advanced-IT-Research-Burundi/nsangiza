@@ -412,34 +412,28 @@
             <div class="nav-section">
                 <div class="nav-title">Main</div>
                 <ul class="nav-items">
-                    <li class="nav-item active">
-                        <a href="{{ route('upload') }}">
+                    <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard') }}">
                             <span class="nav-icon"><i class="fas fa-home"></i></span>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('file.index') }}">
+                    <li class="nav-item {{ isset($activeTab) && $activeTab == 'shared' ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.shared') }}">
                             <span class="nav-icon"><i class="fas fa-folder"></i></span>
                             <span>My Files</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#">
+                    {{-- <li class="nav-item">
+                        <a href="{{ route('dashboard.shared') }}">
                             <span class="nav-icon"><i class="fas fa-share-alt"></i></span>
                             <span>Shared</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-icon"><i class="fas fa-star"></i></span>
-                            <span>Favorites</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
-                            <span>Analytics</span>
+                    </li> --}}
+                    <li class="nav-item {{ isset($activeTab) && $activeTab == 'all' ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.all') }}">
+                            <span class="nav-icon "><i class="fas fa-star"></i></span>
+                            <span>All Files</span>
                         </a>
                     </li>
                 </ul>
