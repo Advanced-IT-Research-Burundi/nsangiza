@@ -232,7 +232,7 @@ class DashboardController extends Controller
      * @param  int  $limit
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function getRecentActivities($limit = 4)
+    private function getRecentActivities($limit = 25)
     {
         return FileActivity::where(function ($query) {
             $query->where('user_id', Auth::id()) // User's own activities

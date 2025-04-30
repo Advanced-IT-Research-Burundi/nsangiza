@@ -93,15 +93,15 @@
         </form>
         @endif
 
-        <!-- Files Section -->
+        <!-- Section des fichiers -->
         <div class="files-header">
             <h2 class="section-title">
                 @if(isset($activeTab) && $activeTab == 'shared')
-                    Shared With Me
+                    Partagés avec moi
                 @elseif(isset($activeTab) && $activeTab == 'all')
-                    All Files
+                    Tous les fichiers
                 @else
-                    Recent Files
+                    Fichiers récents
                 @endif
             </h2>
             <div class="view-toggle">
@@ -109,6 +109,7 @@
                 <button class="toggle-btn" id="listView"><i class="fas fa-list"></i></button>
             </div>
         </div>
+
 
         <div class="files-grid">
             @if(isset($activeTab) && $activeTab == 'shared')
@@ -307,10 +308,11 @@
                     </div>
                 </div>
                 @empty
-                    <div class="col-12">
-                        <div class="alert alert-info">No files found. Upload a file to get started.</div>
-                    </div>
-                @endforelse
+                <div class="col-12">
+                    <div class="alert alert-info">Aucun fichier trouvé. Téléversez un fichier pour commencer.</div>
+                </div>
+            @endforelse
+
             @else
                 @forelse($recentFiles as $file)
                     <div class="file-card">
@@ -414,46 +416,45 @@
             @endif
         </div>
 
-        <!-- Recent Activity -->
-        <div class="activity-section">
-            <div class="activity-header">
-                <h2 class="section-title">Recent Activity</h2>
-                <a href="#" class="btn btn-outline-primary btn-sm">View All</a>
-            </div>
+        <!-- Activité récente -->
+    <div class="activity-section">
+        <div class="activity-header">
+            <h2 class="section-title">Activité récente</h2>
+            {{-- <a href="#" class="btn btn-outline-primary btn-sm">Voir tout</a> --}}
+        </div>
 
-            <ul class="activity-list">
-                @forelse($recentActivities as $activity)
-                    <li class="activity-item">
-                        <div class="activity-icon {{ $activity->icon_class }}">
-                            {!! $activity->activity_icon !!}
+        <ul class="activity-list">
+            @forelse($recentActivities as $activity)
+                <li class="activity-item">
+                    <div class="activity-icon {{ $activity->icon_class }}">
+                        {!! $activity->activity_icon !!}
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-text">
+                            @if($activity->user_id == Auth::id())
+                                Vous avez <strong>{{ $activity->action }}é</strong> {{ $activity->file->name }}
+                            @else
+                                {{ $activity->user->name }} a <strong>{{ $activity->action }}é</strong> {{ $activity->file->name }}
+                            @endif
+                            @if($activity->details)
+                                {{ $activity->details }}
+                            @endif
                         </div>
-                        <div class="activity-details">
-                            <div class="activity-text">
-                                @if($activity->user_id == Auth::id())
-                                    You <strong>{{ $activity->action }}ed</strong> {{ $activity->file->name }}
-                                @else
-                                    {{ $activity->user->name }} <strong>{{ $activity->action }}ed</strong> {{ $activity->file->name }}
-                                @endif
-                                @if($activity->details)
-                                    {{ $activity->details }}
-                                @endif
-                            </div>
-                            <div class="activity-time">
-                                {{ $activity->created_at->diffForHumans() }}
-                            </div>
+                        <div class="activity-time">
+                            {{ $activity->created_at->diffForHumans() }}
                         </div>
-                    </li>
-                @empty
-                    <li class="activity-item">
-                        <div class="activity-details">
-                            <div class="activity-text">No recent activity.</div>
-                        </div>
-                    </li>
-                @endforelse
-            </ul>
+                    </div>
+                </li>
+            @empty
+                <li class="activity-item">
+                    <div class="activity-details">
+                        <div class="activity-text">Aucune activité récente.</div>
+                    </div>
+                </li>
+            @endforelse
+
         </div>
     </div>
-</div>
 
 
 

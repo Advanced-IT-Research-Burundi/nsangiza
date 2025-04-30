@@ -406,64 +406,58 @@
                 <div class="logo-icon">
                     <i class="fas fa-paper-plane"></i>
                 </div>
-                <div class="logo-text">FileShare</div>
+                <div class="logo-text">PartageFichier</div>
             </div>
 
             <div class="nav-section">
-                <div class="nav-title">Main</div>
+                <div class="nav-title">Principal</div>
                 <ul class="nav-items">
                     <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}">
                             <span class="nav-icon"><i class="fas fa-home"></i></span>
-                            <span>Dashboard</span>
+                            <span>Tableau de bord</span>
                         </a>
                     </li>
                     <li class="nav-item {{ isset($activeTab) && $activeTab == 'shared' ? 'active' : '' }}">
                         <a href="{{ route('dashboard.shared') }}">
                             <span class="nav-icon"><i class="fas fa-folder"></i></span>
-                            <span>My Files</span>
+                            <span>Mes fichiers</span>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('dashboard.shared') }}">
-                            <span class="nav-icon"><i class="fas fa-share-alt"></i></span>
-                            <span>Shared</span>
-                        </a>
-                    </li> --}}
                     <li class="nav-item {{ isset($activeTab) && $activeTab == 'all' ? 'active' : '' }}">
                         <a href="{{ route('dashboard.all') }}">
                             <span class="nav-icon "><i class="fas fa-star"></i></span>
-                            <span>All Files</span>
+                            <span>Tous les fichiers</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
             <div class="nav-section">
-                <div class="nav-title">Settings</div>
+                <div class="nav-title">Paramètres</div>
                 <ul class="nav-items">
                     <li class="nav-item">
                         <a href="#">
                             <span class="nav-icon"><i class="fas fa-user"></i></span>
-                            <span>Profile</span>
+                            <span>Profil</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#">
                             <span class="nav-icon"><i class="fas fa-cog"></i></span>
-                            <span>Settings</span>
+                            <span>Paramètres</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
             <div class="nav-section">
-                <div class="nav-title">User Management</div>
+                <div class="nav-title">Gestion utilisateur</div>
                 <ul class="nav-items">
                     <li class="nav-item">
                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span>
-                            <span>Log Out</span>
+                            <span>Se déconnecter</span>
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
@@ -483,7 +477,7 @@
 
                 <div class="search-box">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" placeholder="Search files...">
+                    <input type="text" placeholder="Rechercher des fichiers...">
                 </div>
 
                 <div class="user-menu dropdown">
@@ -494,12 +488,12 @@
                         <span>{{ Auth::user()->name ??''}}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-2').submit();">
-                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                <i class="fas fa-sign-out-alt me-2"></i> Se déconnecter
                             </a>
                             <form id="logout-form-2" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
@@ -511,6 +505,7 @@
             @yield('content')
         </main>
     </div>
+
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
