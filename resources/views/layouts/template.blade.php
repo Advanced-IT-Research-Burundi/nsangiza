@@ -406,7 +406,7 @@
                 <div class="logo-icon">
                     <i class="fas fa-paper-plane"></i>
                 </div>
-                <div class="logo-text">PartageFichier</div>
+                <div class="logo-text">{{ config('app.name') }}</div>
             </div>
 
             <div class="nav-section">

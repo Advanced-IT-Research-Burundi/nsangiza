@@ -518,10 +518,10 @@
                     </button>
 
                     <!-- Social Login Divider -->
-                    <div class="divider">ou connectez-vous avec</div>
+                    {{-- <div class="divider">ou connectez-vous avec</div> --}}
 
                     <!-- Social Login Buttons -->
-                    <div class="social-buttons d-flex gap-2">
+                    {{-- <div class="social-buttons d-flex gap-2">
                         <a href="#" class="btn btn-social google flex-grow-1">
                             <i class="bi bi-google"></i>
                             <span>Google</span>
@@ -534,7 +534,7 @@
                             <i class="bi bi-apple"></i>
                             <span>Apple</span>
                         </a>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
         </div>

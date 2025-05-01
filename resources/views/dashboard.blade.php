@@ -34,13 +34,27 @@
                             <div class="col-md-7">
                                 <div class="share-link-container">
                                     <div class="input-group">
-                                        <input type="text" class="form-control success-share-link" value="{{ url('/share/'.session('fileId')) }}" readonly>
+                                        <input type="text" class="form-control success-share-link" value="{{ url('/dashboard/download/'.session('fileId')) }}" readonly>
                                         <button class="btn btn-outline-success copy-success-btn" type="button">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
                                     <small class="text-muted">Partagez ce lien ou scannez le QR code</small>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="share-options mt-4">
+                            <p class="text-muted mb-2">Partager via</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary share-btn" data-platform="email">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                                <button class="btn btn-outline-primary share-btn" data-platform="whatsapp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                                <button class="btn btn-outline-primary share-btn" data-platform="telegram">
+                                    <i class="fab fa-telegram"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -666,7 +680,7 @@
                 fileNameDisplay.textContent = fileName;
 
                 // Créer le lien de partage
-                const shareLink = `${window.location.origin}/download/${fileId}`;
+                const shareLink = `${window.location.origin}/dashboard/download/${fileId}`;
                 const shareLinkInput = shareModal.querySelector('.share-link');
                 shareLinkInput.value = shareLink;
 

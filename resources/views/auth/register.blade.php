@@ -373,6 +373,33 @@
                     <h2 class="auth-heading">Créer un compte</h2>
                     <p class="auth-subheading">Remplissez le formulaire ci-dessous pour commencer</p>
 
+                    @error('email')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('password')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('password_confirmation')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('terms')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                    </div>
+
+                    @enderror
                     <!-- Registration Form -->
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
