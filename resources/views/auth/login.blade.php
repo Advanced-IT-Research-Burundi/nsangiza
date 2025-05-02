@@ -118,6 +118,13 @@
             position: relative;
             transition: var(--transition);
         }
+        .register-link2 {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: var(--transition);
+        }
 
         .register-link:hover {
             text-decoration: none;
@@ -532,6 +539,9 @@
                         <i class="bi bi-arrow-right-short ms-2 fs-5"></i>
                     </button>
 
+                    <div class="register-text">
+                        Vous n'avez pas de compte ? <a href="{{ route('register') }}" class="register-link2">Inscrivez-vous</a>
+                    </div>
                     <!-- Social Login Divider -->
                     {{-- <div class="divider">ou connectez-vous avec</div> --}}
 
