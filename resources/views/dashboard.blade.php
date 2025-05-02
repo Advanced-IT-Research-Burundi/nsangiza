@@ -723,9 +723,10 @@
                             case 'email':
                                 shareUrl = `mailto:?subject=Partage du fichier: ${fileName}&body=Voici le lien pour accéder au fichier ${fileName}: ${shareLink}`;
                                 break;
-                            case 'whatsapp':
-                                shareUrl = `https://wa.me/?text=${encodeURIComponent(`Voici le fichier ${fileName}: ${shareLink}`)}`;
-                                break;
+                                case 'whatsapp':
+                                    const message = `Voici le fichier *${fileName}* : ${shareLink}`;
+                                    shareUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                                    break;
                             case 'telegram':
                                 shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(`Voici le fichier ${fileName}`)}`;
                                 break;

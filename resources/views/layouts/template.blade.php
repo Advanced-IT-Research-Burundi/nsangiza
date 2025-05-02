@@ -433,7 +433,7 @@
                 </ul>
             </div>
 
-            <div class="nav-section">
+            {{-- <div class="nav-section">
                 <div class="nav-title">Paramètres</div>
                 <ul class="nav-items">
                     <li class="nav-item">
@@ -449,7 +449,7 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
 
             <div class="nav-section">
                 <div class="nav-title">Gestion utilisateur</div>
@@ -488,8 +488,8 @@
                         <span>{{ Auth::user()->name ??''}}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profil</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li>
+                        {{-- <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li> --}}
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-2').submit();">

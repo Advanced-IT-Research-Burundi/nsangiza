@@ -363,7 +363,7 @@
                         </div>
                     </div>
                     <div class="fadeInUp delay-3">
-                        <p class="mb-0">Déjà membre ? <a href="#" class="text-white fw-bold text-decoration-underline">Connectez-vous</a></p>
+                        <p class="mb-0">Déjà membre ? <a href="{{ route('login') }}" class="text-white fw-bold text-decoration-underline">Connectez-vous</a></p>
                     </div>
                     <div class="sidebar-waves"></div>
                 </div>

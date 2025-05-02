@@ -466,6 +466,21 @@
                     <h2 class="login-title">Connexion</h2>
                     <p class="login-subtitle">Entrez vos identifiants pour accéder à votre compte</p>
                 </div>
+                     @error('email')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('password')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
 
                 <form id="loginForm" action="{{ route('login') }}" method="POST">
                     @csrf
