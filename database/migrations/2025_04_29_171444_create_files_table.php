@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('type');
             $table->integer('size');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();

@@ -110,7 +110,8 @@ class DashboardController extends Controller
                 $file->save();
 
                 // Record activity
-                $this->recordActivity($file->id, 'upload', 'Uploaded file');
+                $this->recordActivity($file->id, 'televersé', 'Fichier téléversé');
+
 
                 $uploadedFiles[] = $file;
             }
@@ -136,7 +137,7 @@ class DashboardController extends Controller
         // Check if user has access to this file
         if (true || $file->user_id == Auth::id() || $this->hasFileAccess($file->id)) {
             // Record activity
-            $this->recordActivity($file->id, 'download', 'Downloaded file');
+            $this->recordActivity($file->id, 'telechargé', 'Fichier téléchargé');
 
             return Storage::download($file->path, $file->name);
         }
@@ -192,7 +193,7 @@ class DashboardController extends Controller
         }
 
         // Record activity
-        $this->recordActivity($id, 'share', 'Shared with ' . $shareWithUser->name);
+        $this->recordActivity($id, 'partagé', 'Partagé avec ' . $shareWithUser->name);
 
         return redirect()->back()->with('success', $message);
     }
@@ -240,9 +241,9 @@ class DashboardController extends Controller
     private function getRecentActivities($limit = 25)
     {
         return FileActivity::where(function ($query) {
-            $query->where('user_id', Auth::id()) // User's own activities
+            $query->whereNotNull('user_id')
                 ->orWhereHas('file', function ($fileQuery) {
-                    $fileQuery->where('user_id', Auth::id()); // Activities on user's files
+                    $fileQuery->whereNotNull('user_id');
                 });
         })
         ->with(['user', 'file'])

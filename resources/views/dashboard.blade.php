@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="share-options mt-4">
+                        {{-- <div class="share-options mt-4">
                             <p class="text-muted mb-2">Partager via</p>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-outline-primary share-btn" data-platform="email">
@@ -56,7 +56,7 @@
                                     <i class="fab fa-telegram"></i>
                                 </button>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     @endif
                 </div>
@@ -133,9 +133,12 @@
                         <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
                         <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
 
-                        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        @if (Auth::user()->id == $file->user_id)
+                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        @endif
+
                     </div>
                     <div class="file-icon {{ $file->icon_class }}">
                         <i class="{{ $file->file_icon }}"></i>
@@ -233,9 +236,11 @@
                         <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
                         <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
 
-                        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        @if (Auth::user()->id == $file->user_id)
+                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        @endif
                     </div>
                     <div class="file-icon {{ $file->icon_class }}">
                         <i class="{{ $file->file_icon }}"></i>
@@ -297,7 +302,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="share-options mt-4">
+                                            {{-- <div class="share-options mt-4">
                                                 <p class="text-muted mb-2">Partager via</p>
                                                 <div class="d-flex gap-2">
                                                     <button class="btn btn-outline-primary share-btn" data-platform="email">
@@ -310,7 +315,7 @@
                                                         <i class="fab fa-telegram"></i>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -334,9 +339,12 @@
                             <a href="{{ route('dashboard.download', $file->id) }}" class="action-btn"><i class="fas fa-download"></i></a>
                             <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareFileModal" data-file-id="{{ $file->id }}" data-file-name="{{ $file->name }}"><i class="fas fa-share-alt"></i></a>
 
-                            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            @if (Auth::user()->id == $file->user_id)
+                                <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteFileModal-{{ $file->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            @endif
+
                         </div>
                         <div class="file-icon {{ $file->icon_class }}">
                             <i class="{{ $file->file_icon }}"></i>
@@ -398,7 +406,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="share-options mt-4">
+                                            {{-- <div class="share-options mt-4">
                                                 <p class="text-muted mb-2">Partager via</p>
                                                 <div class="d-flex gap-2">
                                                     <button class="btn btn-outline-primary share-btn" data-platform="email">
@@ -411,7 +419,7 @@
                                                         <i class="fab fa-telegram"></i>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -446,9 +454,9 @@
                     <div class="activity-details">
                         <div class="activity-text">
                             @if($activity->user_id == Auth::id())
-                                Vous avez <strong>{{ $activity->action }}é</strong> {{ $activity->file->name }}
+                                Vous avez <strong>{{ $activity->action }}</strong> {{ $activity->file->name }}
                             @else
-                                {{ $activity->user->name }} a <strong>{{ $activity->action }}é</strong> {{ $activity->file->name }}
+                                {{ $activity->user->name }} a <strong>{{ $activity->action }}</strong> {{ $activity->file->name }}
                             @endif
                             @if($activity->details)
                                 {{ $activity->details }}

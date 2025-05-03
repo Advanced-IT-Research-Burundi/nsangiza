@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('shared_by')->constrained('users');
             $table->string('access_level');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();

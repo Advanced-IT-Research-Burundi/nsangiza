@@ -15,11 +15,12 @@ return new class extends Migration
 
         Schema::create('file_activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('file_id')->constrained();
+            $table->foreignId('file_id')->constrained('files')->onDelete('cascade');
             $table->foreignId('user_id')->constrained();
             $table->string('action');
             $table->string('details');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::enableForeignKeyConstraints();
