@@ -6,11 +6,12 @@
     <div class="content-container">
         <!-- Tabs Navigation -->
         <div class="tabs">
-            <a href="{{ route('dashboard') }}" class="tab {{ !isset($activeTab) || $activeTab == 'upload' ? 'active' : '' }}">Upload Files</a>
-            <a href="{{ route('dashboard.recent') }}" class="tab {{ isset($activeTab) && $activeTab == 'recent' ? 'active' : '' }}">Recent Files</a>
-            <a href="{{ route('dashboard.shared') }}" class="tab {{ isset($activeTab) && $activeTab == 'shared' ? 'active' : '' }}">Shared Files</a>
-            <a href="{{ route('dashboard.all') }}" class="tab {{ isset($activeTab) && $activeTab == 'all' ? 'active' : '' }}">All Files</a>
+            <a href="{{ route('dashboard') }}" class="tab {{ !isset($activeTab) || $activeTab == 'upload' ? 'active' : '' }}">Téléverser des fichiers</a>
+            <a href="{{ route('dashboard.recent') }}" class="tab {{ isset($activeTab) && $activeTab == 'recent' ? 'active' : '' }}">Fichiers récents</a>
+            <a href="{{ route('dashboard.shared') }}" class="tab {{ isset($activeTab) && $activeTab == 'shared' ? 'active' : '' }}">Fichiers partagés</a>
+            <a href="{{ route('dashboard.all') }}" class="tab {{ isset($activeTab) && $activeTab == 'all' ? 'active' : '' }}">Tous les fichiers</a>
         </div>
+
 
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show success-alert" role="alert">

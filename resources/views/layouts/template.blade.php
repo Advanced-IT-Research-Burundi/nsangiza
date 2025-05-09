@@ -475,10 +475,13 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" placeholder="Rechercher des fichiers...">
-                </div>
+                <form action="{{ route('dashboard.all') }}" method="GET">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="search" placeholder="Rechercher des fichiers..." value="{{ request('search') }}">
+                    </div>
+                </form>
+
 
                 <div class="user-menu dropdown">
                     <button class="dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">

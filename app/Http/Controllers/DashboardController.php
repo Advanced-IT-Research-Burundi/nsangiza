@@ -69,10 +69,18 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function allFiles()
+    public function allFiles(Request $request)
     {
         $user = Auth::user();
+        $search = $request->input('search');
+
         $allFiles = $this->getAllFiles();
+        if ($search) {
+            $allFiles = $allFiles->filter(function ($file) use ($search) {
+                return stripos($file->name, $search) !== false; 
+            });
+        }
+
         $recentActivities = $this->getRecentActivities();
 
         return view('dashboard', [
@@ -83,6 +91,7 @@ class DashboardController extends Controller
         ]);
     }
 
+
     /**
      * Handle file upload.
      *
@@ -92,7 +101,7 @@ class DashboardController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'files.*' => 'required|file|max:102400', // 100MB max file size
+            'files.*' => 'required|file|max:307200', // 100MB max file size
         ]);
 
         $uploadedFiles = [];
